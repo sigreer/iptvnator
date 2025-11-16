@@ -1,6 +1,10 @@
 // @import 'themes/';
 @import '@yangkghjh/videojs-aspect-ratio-panel/dist/videojs-aspect-ratio-panel.css';
 
+:root {
+    --app-font-size: 16px;
+}
+
 body,
 html {
     user-select: none;
@@ -8,6 +12,7 @@ html {
     padding: 0;
     height: 100%;
     font-family: Roboto, 'Helvetica Neue', sans-serif;
+    font-size: var(--app-font-size);
 }
 
 @media (display-mode: standalone) {

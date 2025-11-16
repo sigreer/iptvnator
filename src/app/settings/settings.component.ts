@@ -138,6 +138,7 @@ export class SettingsComponent implements OnInit {
         vlcPlayerPath: '',
         remoteControl: false,
         remoteControlPort: 3000,
+        fontSize: 16,
     });
 
     /** Form array with epg sources */
@@ -297,6 +298,7 @@ export class SettingsComponent implements OnInit {
         }
         this.translate.use(this.settingsForm.value.language);
         this.settingsService.changeTheme(this.settingsForm.value.theme);
+        this.applyFontSize(this.settingsForm.value.fontSize);
         this.snackBar.open(
             this.translate.instant('SETTINGS.SETTINGS_SAVED'),
             null,
@@ -305,6 +307,37 @@ export class SettingsComponent implements OnInit {
                 horizontalPosition: 'start',
             }
         );
+    }
+
+    /**
+     * Applies the font size to the app by setting a CSS variable
+     * @param fontSize font size in pixels
+     */
+    applyFontSize(fontSize: number): void {
+        document.documentElement.style.setProperty(
+            '--app-font-size',
+            `${fontSize}px`
+        );
+    }
+
+    /**
+     * Increases the font size by 1 pixel
+     */
+    increaseFontSize(): void {
+        const currentSize = this.settingsForm.value.fontSize || 16;
+        const newSize = Math.min(currentSize + 1, 32); // Max 32px
+        this.settingsForm.patchValue({ fontSize: newSize });
+        this.settingsForm.markAsDirty();
+    }
+
+    /**
+     * Decreases the font size by 1 pixel
+     */
+    decreaseFontSize(): void {
+        const currentSize = this.settingsForm.value.fontSize || 16;
+        const newSize = Math.max(currentSize - 1, 10); // Min 10px
+        this.settingsForm.patchValue({ fontSize: newSize });
+        this.settingsForm.markAsDirty();
     }
 
     /**

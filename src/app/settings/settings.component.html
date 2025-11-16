@@ -231,6 +231,36 @@
         <mat-divider />
         <div class="row">
           <div class="column">
+            {{ 'SETTINGS.FONT_SIZE' | translate }}
+            <p>{{ 'SETTINGS.FONT_SIZE_DESCRIPTION' | translate }}</p>
+          </div>
+          <div class="column" style="display: flex; align-items: center; gap: 10px;">
+            <button
+              mat-icon-button
+              color="accent"
+              type="button"
+              (click)="decreaseFontSize()"
+              [matTooltip]="'SETTINGS.DECREASE_FONT_SIZE' | translate"
+              >
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span style="min-width: 60px; text-align: center;">
+              {{ settingsForm.value.fontSize }} px
+            </span>
+            <button
+              mat-icon-button
+              color="accent"
+              type="button"
+              (click)="increaseFontSize()"
+              [matTooltip]="'SETTINGS.INCREASE_FONT_SIZE' | translate"
+              >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+        <mat-divider />
+        <div class="row">
+          <div class="column">
             {{ 'SETTINGS.SHOW_CAPTIONS' | translate }}
             <p>{{ 'SETTINGS.SHOW_CAPTIONS_DESCRIPTION' | translate }}</p>
           </div>

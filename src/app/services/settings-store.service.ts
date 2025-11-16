@@ -25,6 +25,7 @@ const DEFAULT_SETTINGS: Settings = {
     remoteControl: false,
     remoteControlPort: 3000,
     epgUrl: [],
+    fontSize: 16,
 };
 
 export const SettingsStore = signalStore(
@@ -60,6 +61,7 @@ export const SettingsStore = signalStore(
                 remoteControl: store.remoteControl(),
                 remoteControlPort: store.remoteControlPort(),
                 epgUrl: store.epgUrl(),
+                fontSize: store.fontSize(),
             };
         },
 

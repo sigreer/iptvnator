@@ -215,6 +215,14 @@ export class AppComponent {
                     } else {
                         this.detectDarkMode();
                     }
+
+                    // Apply font size setting
+                    if (settings.fontSize) {
+                        document.documentElement.style.setProperty(
+                            '--app-font-size',
+                            `${settings.fontSize}px`
+                        );
+                    }
                 } else {
                     this.detectDarkMode();
                 }
