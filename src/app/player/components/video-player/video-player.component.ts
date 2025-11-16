@@ -131,6 +131,18 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
 
     volume = 1;
 
+    /** Drawer width for resizable sidebar */
+    drawerWidth = 400;
+
+    /** Min and max width constraints for the drawer */
+    private readonly MIN_DRAWER_WIDTH = 250;
+    private readonly MAX_DRAWER_WIDTH = 800;
+
+    /** Resize state tracking */
+    private isResizing = false;
+    private startX = 0;
+    private startWidth = 0;
+
     private settingsStore = inject(SettingsStore);
 
     constructor(
@@ -163,6 +175,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
      * Sets video player and subscribes to channel list from the store
      */
     ngOnInit(): void {
+        this.loadDrawerWidth();
         this.applySettings();
         this.setRendererListeners();
         this.getPlaylistUrlAsParam();
@@ -306,4 +319,73 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
     navigateHome() {
         this.router.navigate(['/']);
     }
+
+    /**
+     * Loads the saved drawer width from localStorage
+     */
+    loadDrawerWidth(): void {
+        const savedWidth = localStorage.getItem('drawerWidth');
+        if (savedWidth !== null) {
+            const width = Number(savedWidth);
+            if (width >= this.MIN_DRAWER_WIDTH && width <= this.MAX_DRAWER_WIDTH) {
+                this.drawerWidth = width;
+            }
+        }
+    }
+
+    /**
+     * Saves the drawer width to localStorage
+     */
+    saveDrawerWidth(): void {
+        localStorage.setItem('drawerWidth', this.drawerWidth.toString());
+    }
+
+    /**
+     * Starts the resize operation
+     */
+    onResizeStart(event: MouseEvent): void {
+        event.preventDefault();
+        this.isResizing = true;
+        this.startX = event.clientX;
+        this.startWidth = this.drawerWidth;
+
+        // Add resizing class to body to prevent text selection
+        document.body.classList.add('resizing');
+
+        // Add global event listeners
+        document.addEventListener('mousemove', this.onResizeMove);
+        document.addEventListener('mouseup', this.onResizeEnd);
+    }
+
+    /**
+     * Handles the resize operation during mouse move
+     */
+    onResizeMove = (event: MouseEvent): void => {
+        if (!this.isResizing) return;
+
+        const delta = event.clientX - this.startX;
+        const newWidth = this.startWidth + delta;
+
+        // Apply constraints
+        if (newWidth >= this.MIN_DRAWER_WIDTH && newWidth <= this.MAX_DRAWER_WIDTH) {
+            this.drawerWidth = newWidth;
+        }
+    };
+
+    /**
+     * Ends the resize operation
+     */
+    onResizeEnd = (): void => {
+        if (this.isResizing) {
+            this.isResizing = false;
+            this.saveDrawerWidth();
+
+            // Remove resizing class from body
+            document.body.classList.remove('resizing');
+
+            // Remove global event listeners
+            document.removeEventListener('mousemove', this.onResizeMove);
+            document.removeEventListener('mouseup', this.onResizeEnd);
+        }
+    };
 }

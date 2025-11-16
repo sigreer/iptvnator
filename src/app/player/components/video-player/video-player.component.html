@@ -1,6 +1,6 @@
 <mat-drawer-container class="main-container">
     <!-- sidebar content -->
-    <mat-drawer #drawer mode="side" opened disableClose class="mat-drawer">
+    <mat-drawer #drawer mode="side" opened disableClose class="mat-drawer" [style.width.px]="drawerWidth" [style.min-width.px]="drawerWidth">
         @defer {
             <app-sidebar [channels]="channels$ | async" />
         } @loading {
@@ -8,6 +8,8 @@
         } @placeholder {
             <p>Loading...</p>
         }
+        <!-- Resize handle -->
+        <div class="resize-handle" (mousedown)="onResizeStart($event)"></div>
     </mat-drawer>
     <mat-drawer-content class="drawer-content">
         @if (activeChannel$ | async; as activeChannel) {
